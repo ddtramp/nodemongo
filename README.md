@@ -18,7 +18,16 @@ docker exec -ti nodemongo /bin/bash
 
 - Horizontal Scaling pm2
 
-- Horizontal Scaling
+- Horizontal Scaling EC2 or AWS
+
+## http2
+
+```bash
+rsa key
+openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost'  -keyout localhost-privkey.pem -out localhost-cert.pem
+
+
+```
 
 ## Tec
 
