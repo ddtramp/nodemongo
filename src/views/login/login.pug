@@ -1,0 +1,50 @@
+doctype html
+html
+  head
+    include ./../common/head.pug
+    link(href='./../../static/css/sign.css' rel='stylesheet')
+    script.
+      $(() => {
+        const submit = (e) => {
+          let data = {
+            email: $('#inputEmail').val(),
+            password: $('#inputPassword').val(),
+            remember: $('.remember').get(0).checked
+          }
+          $.ajax({
+            url: 'http://localhost:8000/web/login',
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            success (res) {
+              if (res.status === 200) {
+                window.location.href = '/'
+              } else {
+                alert(res.message)
+              }
+            },
+            error (e) {
+              console.error(e)
+            }
+          })
+        }
+        $('.submit').on('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          submit()
+        })
+      })
+  body(class='text-center')
+   form(class='form-signin')
+      img(class='mb-4' src='/static/images/logo.png' alt='' width='72' height='72')
+      h1(class='h3 mb-3 font-weight-normal') Please sign in
+      label(for='inputEmail' class='sr-only') Email address
+      input(type='email' value='wangxichao001@gmail.com' id='inputEmail' class='form-control' placeholder='Email address' required autofocus)
+      label(for='inputPassword' class='sr-only') Password
+      input(type='password' value='abs122825619' id='inputPassword' class='form-control' placeholder='Password' required)
+      div(class='checkbox mb-3')
+        label(style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;")
+          input(type='checkbox' checked class="remember")
+          | &nbsp;Remember me
+      button(class='btn btn-lg btn-primary btn-block', type='btton' class='submit') Sign in
+      p(class='mt-5 mb-3 text-muted') 2017-2018

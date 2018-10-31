@@ -1,0 +1,5 @@
+{"message":"this is test logger info","level":"info"}
+{"message":"this is test logger info","level":"info"}
+{"message":"this is test logger error","level":"error"}
+{"message":"this is test logger info","level":"info"}
+{"message":"this is test logger error","level":"error"}

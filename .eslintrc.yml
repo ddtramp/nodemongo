@@ -1,0 +1,57 @@
+extends: standard
+plugins:
+  - html
+  - standard
+globals:
+  process: true
+env:
+  node: true
+rules:
+  comma-dangle:
+    - error
+    - never
+  no-empty: warn
+  arrow-parens: 0
+  indent:
+    - error
+    - 2
+    - SwitchCase: 1
+  generator-star-spacing: 0
+  no-debugger: 2
+  no-return-assign: 0
+  semi:
+    - error
+    - never
+  quotes:
+    - error
+    - single
+  no-unused-vars: error
+  eqeqeq: error
+  space-infix-ops: error
+  comma-spacing:
+    - error
+    - before: false
+      after: true
+  brace-style: error
+  curly: error
+  no-undef: error
+  operator-linebreak:
+    - error
+    - after
+  block-spacing: error
+  comma-style:
+    - error
+    - last
+  key-spacing:
+    - error
+    - beforeColon: false
+  constructor-super: error
+  camelcase:
+    - error
+    - properties: always
+  no-multiple-empty-lines:
+    - error
+    - max: 1
+      maxEOF: 1
+      maxBOF: 0
+
