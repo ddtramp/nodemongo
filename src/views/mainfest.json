@@ -1,0 +1,22 @@
+{
+  "/static/images/favicon.ico": {
+    "priority": 1,
+    "type": "img"
+  },
+  "/static/css/common-layout.css": {
+    "priority": 1,
+    "type": "style"
+  },
+  "/static/plugins/bootstrap-4.0.0-dist/css/bootstrap.min.css": {
+    "priority": 1,
+    "type": "style"
+  },
+  "/static/plugins/jquery-3.3.1/jquery-3.3.1.min.js": {
+    "priority": 2,
+    "type": "script"
+  },
+  "/static/plugins/bootstrap-4.0.0-dist/js/bootstrap.min.js": {
+    "priority": 2,
+    "type": "script"
+  }
+}

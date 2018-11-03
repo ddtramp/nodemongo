@@ -1,9 +1,11 @@
-const http = require('http')
+// const http = require('http')
+const spdy = require('spdy')
 const Koa2 = require('koa2')
 const path = require('path')
+const fs = require('fs')
 
 const bodyparser = require('koa-bodyparser')
-const router = require('koa-router')()
+const Router = require('koa-router')
 const session = require('koa-session2')
 
 const rest = require('./lib/rest')
@@ -11,10 +13,18 @@ const controller = require('./lib/controller')
 const template = require('./lib/templating')
 const Store = require('./lib/Store.js')
 
+// const Http2Puser = require('./lib/http2-pusher') // pusher
 const Logger = require('./lib/logger') // logger
-
+const { logger } = Logger
 const DB = require('./lib/db')
 
+const apiRouter = new Router()
+const viewRouter = new Router()
+
+const options = {
+  key: fs.readFileSync('localhost-privkey.pem'),
+  cert: fs.readFileSync('localhost-cert.pem')
+}
 // Mogodb driver is async
 // db must be register before use router
 DB.init((db) => {
@@ -33,31 +43,33 @@ DB.init((db) => {
       return ctx.request.header.origin
       // return 'http://localhost:8080' // 这样就能只允许 http://localhost:8080 这个域名的请求了
     },
-    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization', 'x-auth-token', 'access-auth-token'],
+    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization', 'x-auth-token'],
     maxAge: 5,
     credentials: true,
     allowMethods: ['GET', 'PUT', 'POST', 'DELETE', 'HEAD', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'x-auth-token', 'access-auth-token']
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'x-auth-token']
   }))
 
   app.use(async (ctx, next) => {
     ctx.db = db
-    ctx.logger = Logger.logger
+    ctx.logger = logger
     await next()
   })
-  // session
-  app.use(session({
+
+  // view session
+  viewRouter.use(session({
     key: 'sessionId',
     store: new Store()
   }))
 
-  // app.use((async (ctx, next) => {
-  //   ctx.db = db
-  //   await next()
-  // }))
-  // log request URL
+  // TODO api router should not use session
+  apiRouter.use(session({
+    key: 'sessionId',
+    store: new Store()
+  }))
+
   app.use(async (ctx, next) => {
-    console.log(`Process ${ctx.request.method} ${ctx.request.url}...`)
+    ctx.logger.info(`Process ${ctx.request.method} ${ctx.request.url}...`)
     let start = new Date().getTime()
     let execTime
     await next()
@@ -73,7 +85,7 @@ DB.init((db) => {
 
   app.use(bodyparser())
 
-  app.use(template(path.join(__dirname, '/views'), {
+  app.use(template(path.join(__dirname, '/templates'), {
     globals: [{
       title: 'test pug'
     }]
@@ -81,11 +93,19 @@ DB.init((db) => {
 
   app.use(rest.restify())
 
-  controller.addControllers(router)
-  app.use(router.routes())
+  controller.addControllers(apiRouter)
+  controller.addViewControllers(viewRouter)
 
-  // let server = app.listen(process.env.PORT, ())
-  let server = http.createServer(app.callback()).listen(process.env.PORT, () => { // eslint-disable-line
-    console.log(`Server is running at ${process.env.PORT}`)
+  app.use(apiRouter.routes())
+  app.use(viewRouter.routes())
+
+  const server = spdy.createServer(options, app.callback())
+  server.listen(443, () => {
+    // logger.info(`Server is running at ${process.env.PORT}`)
+    logger.info(`Server is running at ${443}`)
+  })
+
+  process.on('uncaughtException', (error) => {
+    logger.error('uncaughtException: ' + error)
   })
 })

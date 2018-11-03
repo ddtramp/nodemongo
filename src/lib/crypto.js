@@ -1,4 +1,4 @@
-const CryptoJS = require("crypto-js")
+const CryptoJS = require('crypto-js')
 const config = require('./../config')
 /**
  * encrypt

@@ -12,12 +12,12 @@ module.exports = {
     let name = ctx.request.body.name
     let passwd = ctx.request.body.passwd
 
-    console.log('Name: ' + name + ' | Passwd: ' + passwd)
+    ctx.logger.info('Name: ' + name + ' | Passwd: ' + passwd)
 
     let user = {
       name: name || 'unknow',
       passwd: '****',
-      Created_At: new Date()
+      CreatedAt: new Date()
     }
     ctx.rest({
       user

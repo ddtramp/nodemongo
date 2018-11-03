@@ -1,3 +1,4 @@
+const logger = require('./logger').logger
 module.exports = {
   APIError: function (code, message) {
     this.code = code || 'internal:unknown_error'
@@ -6,9 +7,8 @@ module.exports = {
   restify: (pathPrefix) => {
     pathPrefix = pathPrefix || '/api/'
     return async (ctx, next) => {
-      console.log(ctx.request.path.startsWith(pathPrefix))
       if (ctx.request.path.startsWith(pathPrefix)) {
-        console.log(`Process API ${ctx.request.method} ${ctx.request.url}...`)
+        logger.info(`Process API ${ctx.request.method} ${ctx.request.url}...`)
         ctx.rest = (data) => {
           ctx.response.type = 'application/json'
           ctx.response.body = data
@@ -16,7 +16,7 @@ module.exports = {
         try {
           await next()
         } catch (e) {
-          console.log('Process API error...')
+          logger.error('Process API error...')
           ctx.response.status = 400
           ctx.response.type = 'application/json'
           ctx.response.body = {

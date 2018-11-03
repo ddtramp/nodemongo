@@ -2,7 +2,7 @@ const MongoClient = require('mongodb').MongoClient
 // TODO open listener
 // require('./db-listener')
 const config = require('./../config')
-
+const logger = require('./logger').logger
 /**
  * start process
  */
@@ -23,7 +23,7 @@ const startProcess = async (fn) => {
     let db = client.db(dbName)
     fn && fn(db)
   } catch (err) {
-    console.log('============== mongodb connect error ===============')
+    logger.error(err)
     throw err
   }
 }

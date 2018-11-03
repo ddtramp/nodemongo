@@ -15,13 +15,12 @@ module.exports = {
 
       let data = await ctx.db.collection('customers').find({}, { limit: 10 }).toArray()
 
-      console.log('data: ', data)
       ctx.logger.info('this is test logger info')
       ctx.logger.error('this is test logger error')
 
       ctx.rest(data)
     } catch (e) {
-      console.error('CUSTOMERS', e)
+      ctx.logger.error('CUSTOMERS', e)
       throw new APIError('CUSTOMERS', 'get customers error')
     }
   }

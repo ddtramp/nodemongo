@@ -13,25 +13,21 @@ module.exports = async (ctx, next) => {
     var connections = {},
       swap
     await async.parallel([
-      async function (done) {
+      async function () {
         exec('netstat -an | grep : 27017 | wc -l', function (e, res) {
-          console.log(e)
           connections['27017'] = parseInt(res, 10)
-          done()
         })
       },
-      async function (done) {
+      async function () {
         exec('netstat -an | grep : 3000 | wc -l',
           function (e, res) {
             connections[3000] = parseInt(res, 10)
-            done()
           })
       },
-      async function (done) {
+      async function () {
         exec('vmstat -SM -s | grep "used swap" | sed -E "s/[^0-9]*([0-9]{1,8}).*/\1/"',
           function (e, res) {
             swap = res
-            done()
           })
       }
     ], function (e) {

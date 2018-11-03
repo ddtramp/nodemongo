@@ -37,7 +37,7 @@ let logger = Winston.createLogger({
     //   filename: 'combined.log'
     // })
     new (Winston.transports.DailyRotateFile)({
-      dirname: './logs',
+      dirname: './../logs',
       filename: 'application-%DATE%.log',
       datePattern: 'YYYY-MM-DD-HH',
       zippedArchive: true,

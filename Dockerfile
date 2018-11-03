@@ -1,7 +1,7 @@
 FROM node:8.12.0-jessie
 # image metadata
 LABEL version="1.0.0"
-LABEL destription="this is example Dockerfile"
+LABEL destription="this is http2 example Dockerfile"
 ARG mongodb_container_name
 ARG app_env
 # Environment variables

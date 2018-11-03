@@ -2,16 +2,20 @@ extends ./../common/layout
 
 block content
   h1 should be display more data
-  p #{user.email} this data comes from  the server
+  #user
+    if user.email
+      p Login User: #{user.email}
+      button(type='button' class='exit btn btn-primary' ) Exit
+    else
+      a(href='/login.html') Login Now
 
-  button(type='button' class='exit btn btn-primary' ) Exit
   script.
     $(() => {
       $('.exit').on('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
         $.ajax({
-          url: 'http://localhost:8000/web/exit',
+          url: 'https://localhost:8000/web/exit',
           type: 'GET',
           dataType: 'json',
           success (res) {
