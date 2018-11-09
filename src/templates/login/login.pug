@@ -4,12 +4,15 @@ html
     include ./../common/head.pug
     link(href='./../../static/css/sign.css' rel='stylesheet')
     script.
+
+      const csrf = '!{token}'
       $(() => {
         const submit = (e) => {
           let data = {
             email: $('#inputEmail').val(),
             password: $('#inputPassword').val(),
-            remember: $('.remember').get(0).checked
+            remember: $('.remember').get(0).checked,
+            _csrf: csrf
           }
           $.ajax({
             url: 'https://localhost:8000/web/login',

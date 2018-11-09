@@ -3,11 +3,13 @@ extends ./../common/layout
 block content
   h1 should be display more data
   #user
+    p token: #{token}
     if user.email
       p Login User: #{user.email}
       button(type='button' class='exit btn btn-primary' ) Exit
     else
       a(href='/login.html') Login Now
+      a(href='/register.html' style="margin-left: 20px;") Register
 
   script.
     $(() => {
@@ -15,7 +17,7 @@ block content
         e.preventDefault()
         e.stopPropagation()
         $.ajax({
-          url: 'https://localhost:8000/web/exit',
+          url: 'https://localhost:8000/web/logout',
           type: 'GET',
           dataType: 'json',
           success (res) {

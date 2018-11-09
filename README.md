@@ -1,5 +1,15 @@
 # README
 
+// TODO Authentication
+// sql 注入
+// csrf done
+// koa-compress gzip
+// koa-helmet security
+// TODO redis cluster
+// TODO mogodb cluster
+// TODO logic server custer
+
+
 ```bash
  docker build -t ddtramdocker/nodemongohttp2:1.0.0 --build-arg mongodb_container_name=mongodb_mongo_1 --build-arg app_env=dev  .
 
@@ -63,7 +73,11 @@ openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost'  -keyout
 
 - fs `build-in` file
 
-- [crypto-js](https://www.npmjs.com/package/crypto-js)   encrypt string
+- [crypto-js](https://www.npmjs.com/package/crypto-js)   encrypt string use bcrypt -- deprecated
+
+- [bcrypt](https://www.npmjs.com/package/bcrypt) install error, change to bcryptjs
+
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 
 - [pm2](https://www.npmjs.com/package/pm2) cluster、Operation and maintenance
 
@@ -78,6 +92,10 @@ openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost'  -keyout
 - [winston-mongodb](https://www.npmjs.com/package/winston-mongodb)
 
 - [winston-daily-rotate-file](https://www.npmjs.com/package/winston-daily-rotate-file)
+
+- [acl](https://github.com/OptimalBits/node_acl) NODE ACL - Access Control Lists for Node
+
+- [koa-crsf](https://www.npmjs.com/package/koa-csrf)  Cross site request forgery
 
 ----
 by jack

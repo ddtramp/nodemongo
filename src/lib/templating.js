@@ -35,7 +35,10 @@ function templating (pathDir, opts) {
   var env = createEnv(pathDir, opts)
   return async (ctx, next) => {
     ctx.render = function (view, model = {}) {
-      let globalsData = { state: ctx.state || {}, ...model }
+      let globalsData = {
+        state: ctx.state || {},
+        ...model
+      }
       let fn = pug.compileFile(path.join(pathDir, '/', view), env)
       ctx.response.body = fn(globalsData)
       ctx.response.type = 'text/html'

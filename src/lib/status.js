@@ -1,3 +1,5 @@
+// https://github.com/azat-co/node-in-production/blob/master/code/status.js
+
 const os = require('os')
 const exec = require('child_process').exec
 const async = require('async')

@@ -21,7 +21,7 @@ const startProcess = async (fn) => {
     // Use connect method to connect to the Server
     await client.connect()
     let db = client.db(dbName)
-    fn && fn(db)
+    fn && fn(db, client)
   } catch (err) {
     logger.error(err)
     throw err

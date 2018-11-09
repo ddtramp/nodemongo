@@ -1,7 +1,3 @@
-const fs = require('fs')
-const zlib = require('zlib')
-const path = require('path')
-
 module.exports = {
   'GET /': async (ctx, next) => {
     let session = ctx.session
@@ -12,6 +8,7 @@ module.exports = {
     // if (ctx.session.user) {
     ctx.render('index/index.pug', {
       user,
+      token: ctx.csrf,
       title: 'index page'
     })
     // } else {
@@ -61,6 +58,46 @@ module.exports = {
     //     .pipe(stream)
     // })
 
-    ctx.render('login/login.pug', { hi: 'hi pug', title: 'login' })
+    ctx.render('login/login.pug', {
+      hi: 'hi pug',
+      title: 'login',
+      token: ctx.csrf
+    })
+  },
+  'GET /register.html': async (ctx, next) => {
+    ctx.session = null
+    const http2Pusher = require('./../../lib/http2-pusher')
+    http2Pusher({
+      mainfestData: {
+        '/static/images/logo.png': {
+          weight: 1,
+          type: 'img'
+        }
+      }
+    })(ctx, next)
+    ctx.render('login/register.pug', {
+      hi: 'hi pug',
+      title: 'Register Page'
+    })
+  },
+  'GET /protected.html': async (ctx, next) => {
+    ctx.type = 'text/html'
+    ctx.status = 200
+    ctx.body = 'protected page'
+  },
+  'GET /profile': async (ctx, next) => {
+    ctx.type = 'text/html'
+    ctx.status = 200
+    ctx.body = 'profile page'
+  },
+  'GET /admin': async (ctx, next) => {
+    ctx.type = 'text/html'
+    ctx.status = 200
+    ctx.body = 'admin page'
+  },
+  'GET /404.html': async (ctx, next) => {
+    ctx.type = 'text/html'
+    ctx.status = 200
+    ctx.body = '404, not found'
   }
 }

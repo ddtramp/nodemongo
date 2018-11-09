@@ -1,3 +1,8 @@
+/**
+ * APM
+ * http: //mongodb.github.io/node-mongodb-native/3.1/reference/management/apm/
+ */
+
 const logger = require('./logger').logger
 const listener = require('mongodb').instrument({
   operationIdGenerator: {

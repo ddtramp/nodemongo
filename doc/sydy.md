@@ -48,6 +48,8 @@ The mainfest.json format is:
 
 ## issue
 
-It seems some browsers may use "upgrade: h2" header to up an connection from plain http to http2 (without tls, so NPN/ALPN unavailable)
+- It seems some browsers may use "upgrade: h2" header to up an connection from plain http to http2 (without tls, so NPN/ALPN unavailable)
 
 [auto protocol upgrade from http/1.x to h2](https://github.com/spdy-http2/node-spdy/issues/243)
+
+- maybe have priority issue

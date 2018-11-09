@@ -1,5 +1,6 @@
 /**
  * Created by jack on 08/05/2017.
+ * https: //www.npmjs.com/package/koa-session2
  */
 const Redis = require('ioredis')
 const uid = require('uid-safe')

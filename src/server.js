@@ -6,12 +6,11 @@ const fs = require('fs')
 
 const bodyparser = require('koa-bodyparser')
 const Router = require('koa-router')
-const session = require('koa-session2')
 
 const rest = require('./lib/rest')
 const controller = require('./lib/controller')
 const template = require('./lib/templating')
-const Store = require('./lib/Store.js')
+const Acl = require('./lib/ACL')
 
 // const Http2Puser = require('./lib/http2-pusher') // pusher
 const Logger = require('./lib/logger') // logger
@@ -27,14 +26,21 @@ const options = {
 }
 // Mogodb driver is async
 // db must be register before use router
-DB.init((db) => {
+DB.init((db, client) => {
   const app = new Koa2()
-
   const isProduction = process.env.NODE_ENV === 'production'
+  const acllogger = { // this is acl logger
+    debug: (msg) => {
+      logger.info(`* ACL DBEUG: ${msg} *`)
+    }
+  }
 
-  let cors = require('koa2-cors')
+  const mongoBackend = new Acl.mongodbBackend(db, 'acl_') // eslint-disable-line
+  const acl = new Acl(mongoBackend, acllogger)
 
-  app.use(cors({
+  let Koa2cors = require('koa2-cors')
+
+  app.use(Koa2cors({
     origin: function (ctx) {
       // return '*'
       // if (ctx.url === '/test') {
@@ -51,22 +57,11 @@ DB.init((db) => {
   }))
 
   app.use(async (ctx, next) => {
+    ctx.acl = acl
     ctx.db = db
     ctx.logger = logger
     await next()
   })
-
-  // view session
-  viewRouter.use(session({
-    key: 'sessionId',
-    store: new Store()
-  }))
-
-  // TODO api router should not use session
-  apiRouter.use(session({
-    key: 'sessionId',
-    store: new Store()
-  }))
 
   app.use(async (ctx, next) => {
     ctx.logger.info(`Process ${ctx.request.method} ${ctx.request.url}...`)
@@ -98,6 +93,20 @@ DB.init((db) => {
 
   app.use(apiRouter.routes())
   app.use(viewRouter.routes())
+
+  // koa2 error handler
+  app.use(async (ctx, next) => {
+    try {
+      await next()
+    } catch (err) {
+      // TODO record error to logger
+      ctx.type = 'application/json'
+      ctx.status = err.statusCode || err.status || 500
+      ctx.body = {
+        message: err.message
+      }
+    }
+  })
 
   const server = spdy.createServer(options, app.callback())
   server.listen(443, () => {
