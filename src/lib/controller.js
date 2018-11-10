@@ -2,11 +2,15 @@ const fs = require('fs')
 const path = require('path')
 const logger = require('./logger').logger
 
+const cors = require('./koa2Cors')
+
 const viewControl = require('./../acl/view-control')
 const apiControl = require('./../acl/api-control')
 
 const csrfMiddleware = require('./csrf')
 const session = require('./session')
+
+const jwtModule = require('./jwt').middleware
 
 /**
  * add router from map
@@ -39,9 +43,7 @@ function addMapping (router, mapping, argvs = []) {
 }
 
 function addControllers (router) {
-  router.use(apiControl) // api auth
-
-  let argvs = []
+  let argvsTop = []
   let folderDir = path.join(__dirname, './../controllers')
   let dirs = fs.readdirSync(folderDir)
 
@@ -51,10 +53,15 @@ function addControllers (router) {
     var jsFiles = files.filter((f) => {
       return f.endsWith('.js')
     }, files)
-
+    let argvs = [...argvsTop]
+    // TODO acl
     if (folderName === 'web') {
       argvs.push(session)
       argvs.push(csrfMiddleware)
+    } else {
+      argvs.push(cors)
+      argvs.push(jwtModule) // verify token and set session
+      argvs.push(apiControl) // TODO acl control
     }
 
     for (var f of jsFiles) {

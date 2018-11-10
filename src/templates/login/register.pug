@@ -4,37 +4,31 @@ html
     include ./../common/head.pug
     link(href='./../../static/css/sign.css' rel='stylesheet')
     script.
-
-      const csrf = '!{token}'
       $(() => {
         const submit = (e) => {
+          let passwd = $('#inputPassword').val().trim()
+          let rePasswd = $('#inputRePassword').val().trim()
+          if(passwd !== rePasswd) {
+            alert('The password do not equal')
+            return
+          }
           let data = {
             email: $('#inputEmail').val(),
-            password: $('#inputPassword').val(),
-            remember: $('.remember').get(0).checked
-            //- _csrf: csrf
+            password: $('#inputPassword').val()
           }
           $.ajax({
-            url: 'https://localhost:8000/web/login',
+            url: 'https://localhost:8000/web/register',
             type: 'POST',
             data: data,
             dataType: 'json',
-            beforeSend (XMLHttpRequest) {
-              XMLHttpRequest.setRequestHeader('csrf-token', csrf)
-            },
             success (res) {
               if (res.status === 200) {
                 window.location.href = '/'
               } else {
                 alert(res.message)
-                console.log(res)
-                // window.location.reload()
               }
             },
             error (e) {
-              if (e.status === 403) {
-                window.location.reload()
-              }
               console.error(e)
             }
           })
@@ -48,14 +42,12 @@ html
   body(class='text-center')
    form(class='form-signin')
       img(class='mb-4' src='/static/images/logo.png' alt='' width='72' height='72')
-      h1(class='h3 mb-3 font-weight-normal') Please sign in
+      h1(class='h3 mb-3 font-weight-normal') Register Now
       label(for='inputEmail' class='sr-only') Email address
       input(type='email' value='wangxichao001@gmail.com' id='inputEmail' class='form-control' placeholder='Email address' required autofocus)
       label(for='inputPassword' class='sr-only') Password
       input(type='password' value='abs122825619' id='inputPassword' class='form-control' placeholder='Password' required)
-      div(class='checkbox mb-3')
-        label(style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;")
-          input(type='checkbox' checked class="remember")
-          | &nbsp;Remember me
-      button(class='btn btn-lg btn-primary btn-block', type='btton' class='submit') Sign in
+      input(type='password' value='abs122825619' id='inputRePassword' class='form-control' placeholder='Enter the Password Again' required)
+
+      button(class='btn btn-lg btn-primary btn-block', type='btton' class='submit') Register
       p(class='mt-5 mb-3 text-muted') 2017-2018

@@ -1,3 +1,4 @@
 /node_modules
 /src/logs/*
 /src/logs/.gitkeep
+/src/config/config-test.js

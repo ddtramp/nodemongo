@@ -5,6 +5,7 @@
 // csrf done
 // koa-compress gzip
 // koa-helmet security
+// koa-valivate
 // TODO redis cluster
 // TODO mogodb cluster
 // TODO logic server custer
@@ -96,6 +97,10 @@ openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost'  -keyout
 - [acl](https://github.com/OptimalBits/node_acl) NODE ACL - Access Control Lists for Node
 
 - [koa-crsf](https://www.npmjs.com/package/koa-csrf)  Cross site request forgery
+
+- [parameter](https://www.npmjs.com/package/parameter) validate user input
+
+- [jwt|jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 
 ----
 by jack

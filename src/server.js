@@ -11,6 +11,7 @@ const rest = require('./lib/rest')
 const controller = require('./lib/controller')
 const template = require('./lib/templating')
 const Acl = require('./lib/ACL')
+const validator = require('./lib/parameter')
 
 // const Http2Puser = require('./lib/http2-pusher') // pusher
 const Logger = require('./lib/logger') // logger
@@ -29,6 +30,7 @@ const options = {
 DB.init((db, client) => {
   const app = new Koa2()
   const isProduction = process.env.NODE_ENV === 'production'
+
   const acllogger = { // this is acl logger
     debug: (msg) => {
       logger.info(`* ACL DBEUG: ${msg} *`)
@@ -38,28 +40,25 @@ DB.init((db, client) => {
   const mongoBackend = new Acl.mongodbBackend(db, 'acl_') // eslint-disable-line
   const acl = new Acl(mongoBackend, acllogger)
 
-  let Koa2cors = require('koa2-cors')
-
-  app.use(Koa2cors({
-    origin: function (ctx) {
-      // return '*'
-      // if (ctx.url === '/test') {
-      //     return '*' // 允许来自所有域名请求
-      // }
-      return ctx.request.header.origin
-      // return 'http://localhost:8080' // 这样就能只允许 http://localhost:8080 这个域名的请求了
-    },
-    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization', 'x-auth-token'],
-    maxAge: 5,
-    credentials: true,
-    allowMethods: ['GET', 'PUT', 'POST', 'DELETE', 'HEAD', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'x-auth-token']
-  }))
+  // koa2 error handler, view and api should be separated
+  app.use(async (ctx, next) => {
+    try {
+      await next()
+    } catch (err) {
+      // TODO record error to logger
+      ctx.type = 'application/json'
+      ctx.status = err.statusCode || err.status || 500
+      ctx.body = {
+        message: err.message
+      }
+    }
+  })
 
   app.use(async (ctx, next) => {
     ctx.acl = acl
     ctx.db = db
     ctx.logger = logger
+    ctx.validator = validator // only api use this
     await next()
   })
 
@@ -81,9 +80,7 @@ DB.init((db, client) => {
   app.use(bodyparser())
 
   app.use(template(path.join(__dirname, '/templates'), {
-    globals: [{
-      title: 'test pug'
-    }]
+    globals: [] // https://github.com/pugjs/pug/issues/2141
   }))
 
   app.use(rest.restify())
@@ -93,20 +90,6 @@ DB.init((db, client) => {
 
   app.use(apiRouter.routes())
   app.use(viewRouter.routes())
-
-  // koa2 error handler
-  app.use(async (ctx, next) => {
-    try {
-      await next()
-    } catch (err) {
-      // TODO record error to logger
-      ctx.type = 'application/json'
-      ctx.status = err.statusCode || err.status || 500
-      ctx.body = {
-        message: err.message
-      }
-    }
-  })
 
   const server = spdy.createServer(options, app.callback())
   server.listen(443, () => {

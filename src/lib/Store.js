@@ -1,5 +1,7 @@
 /**
  * Created by jack on 08/05/2017.
+ * web service use koa-session2 sid: { user, remember }
+ * api service use : user._id: { ...user }
  * https: //www.npmjs.com/package/koa-session2
  */
 const Redis = require('ioredis')

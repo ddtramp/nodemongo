@@ -1,5 +1,5 @@
 let status = require('./../../lib/status')
 
 module.exports = {
-  'GET /status': status
+  'GET /rpc/status': status
 }

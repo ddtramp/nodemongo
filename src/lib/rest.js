@@ -13,8 +13,8 @@ module.exports = {
       if (ctx.request.path.startsWith(pathPrefix)) {
         logger.info(`Process API ${ctx.request.method} ${ctx.request.url}...`)
         ctx.rest = (data) => {
-          ctx.response.type = 'application/json'
-          ctx.response.body = data
+          ctx.body = data
+          ctx.type = 'application/json'
         }
         try {
           await next()

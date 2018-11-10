@@ -77,8 +77,24 @@ module.exports = {
     })(ctx, next)
     ctx.render('login/register.pug', {
       hi: 'hi pug',
+      token: ctx.csrf,
       title: 'Register Page'
     })
+  },
+  'GET /reset.html': async (ctx, next) => {
+    ctx.render('login/reset.pug', {
+      hi: 'hi pug',
+      token: ctx.csrf,
+      title: 'Reset Page'
+    })
+  },
+  /**
+   * verify email and token
+   * reset password
+   */
+  'POST /reset/:userId/:token': async (ctx, next) => {
+    ctx.body = 'lalala...'
+    ctx.type = 'text/html'
   },
   'GET /protected.html': async (ctx, next) => {
     ctx.type = 'text/html'

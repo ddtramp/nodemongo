@@ -10,6 +10,7 @@ block content
     else
       a(href='/login.html') Login Now
       a(href='/register.html' style="margin-left: 20px;") Register
+      a(href='/reset.html' style="margin-left: 20px;") Reset Password
 
   script.
     $(() => {
@@ -22,7 +23,7 @@ block content
           dataType: 'json',
           success (res) {
             if (res.status === 200) {
-              window.location.href = '/login.html'
+              window.location.reload()
             } else {
               console.error(res.message)
             }

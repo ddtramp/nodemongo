@@ -1,4 +1,11 @@
 const APIError = require('./../../lib/rest').APIError
+const Store = require('./../../lib/Store')
+const JWT = require('jsonwebtoken')
+const config = require('./../../config')
+
+const crypt = require('./../../lib/crypto')
+
+const store = new Store()
 
 module.exports = {
   /**
@@ -9,54 +16,100 @@ module.exports = {
    * @constructor
    */
   'POST /api/signin': async (ctx, next) => {
-    let name = ctx.request.body.name
-    let passwd = ctx.request.body.passwd
+    try {
+      let body = ctx.request.body
+      let email = body.email.trim()
+      let password = body.password.trim()
+      let data = {
+        email,
+        password
+      }
+      let rule = {
+        email: 'email',
+        password: 'string',
+        remember: {
+          required: false,
+          type: 'string'
+        }
+      }
+      let errors = ctx.validator.validate(rule, data)
+      if (!errors) {
+        let user = await ctx.db.collection('users').findOne({
+          email
+        })
+        if (!user) {
+          ctx.rest({
+            status: 403,
+            data: null,
+            message: 'Email and/or password is wrong.'
+          })
+        } else if (await crypt.compare(password, user.password)) {
+          let session = {
+            user
+          }
+          let token = JWT.sign(session, config.jwt.secret) // generate token
 
-    ctx.logger.info('Name: ' + name + ' | Passwd: ' + passwd)
-
-    let user = {
-      name: name || 'unknow',
-      passwd: '****',
-      CreatedAt: new Date()
+          await store.set(session, {
+            sid: user._id
+          }) // set token to redis
+          ctx.rest({
+            status: 200,
+            data: Object.assign({}, user, {
+              password: null,
+              token // send token
+            }),
+            message: 'success'
+          })
+        } else {
+          ctx.rest({
+            status: 403,
+            data: null,
+            message: 'Email and/or password is wrong.'
+          })
+        }
+      } else {
+        throw new APIError(403, errors)
+      }
+    } catch (e) {
+      ctx.throw(500)
     }
-    ctx.rest({
-      user
-    })
+  },
+  /**
+   * SON OF A BITCH, SOMETIMES THE ASYNC/AWAIT CAUSE ERROR
+   * AND NO REASON, AND Suddenly, IT'S JSUE FINE
+   */
+  'GET /api/users': async (ctx, next) => {
+    try {
+      let session = ctx.session
+      let users = await ctx.db.collection('users').find({}).toArray()
+      ctx.rest({
+        status: 200,
+        message: 'success',
+        data: {
+          session,
+          users
+        }
+      })
+    } catch (e) {
+      ctx.logger.error(e)
+      ctx.throw(500)
+    }
+  },
+  'POST /api/users': async (ctx, next) => {
+    try {
+      let session = ctx.session
+      let users = await ctx.db.collection('users').find({}).toArray()
+      ctx.rest({
+        status: 200,
+        message: 'success',
+        data: {
+          session,
+          users
+        }
+      })
+    } catch (e) {
+      ctx.logger.error(e)
+      ctx.throw(500)
+    }
   }
-  // /**
-  //  * get signin user info
-  //  * @param ctx
-  //  * @param next
-  //  * @returns {Promise.<void>}
-  //  * @constructor
-  //  */
-  // 'GET /api/getSignInUser': async (ctx, next) => {
-  //     let user = ctx.session.user;    // get SESSION
-  //     console.log(user);
-  //     if (user) {
-  //         ctx.rest(user);
-  //     } else {
-  //         throw new APIError('user:not_found', 'user not sign in.');
-  //     }
-  // },
-  // 'GET /api/products': async (ctx, next) => {
-  //     ctx.rest({
-  //         products: products.getProducts()
-  //     });
-  // },
-
-  // 'POST /api/products': async (ctx, next) => {
-  //     var p = products.createProduct(ctx.request.body.name, ctx.request.body.manufacturer, parseFloat(ctx.request.body.price));
-  //     ctx.rest(p);
-  // },
-
-  // 'DELETE /api/products/:id': async (ctx, next) => {
-  //     console.log(`delete product ${ctx.params.id}...`);
-  //     var p = products.deleteProduct(ctx.params.id);
-  //     if (p) {
-  //         ctx.rest(p);
-  //     } else {
-  //         throw new APIError('product:not_found', 'product not found by id.');
-  //     }
-  // }
 }
