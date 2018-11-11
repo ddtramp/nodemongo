@@ -1,15 +1,31 @@
 # README
 
 // Authentication           done
-// oauth   see github
-// sql 注入s
+
+// oauth   see [github](https://github.com/ddtramp/oauth-passport-demo)
+
+// sql 注入                 done
+
 // csrf                     done
+
 // koa-compress gzip        done  http2/push
+
 // koa-helmet security
+
+this project use koa-crsf
+
+https://blog.risingstack.com/node-js-security-checklist/
+
+https://segmentfault.com/a/1190000003860400
+
 // koa-valivate             done  parameter
+
 // TODO redis cluster
+
 // TODO mogodb cluster
+
 // TODO logic server custer
+
 // add dev pm2.yml file https://segmentfault.com/q/1010000004131939     done
 
 ```bash
