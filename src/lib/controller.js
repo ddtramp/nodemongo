@@ -57,6 +57,11 @@ function addControllers (router) {
     // TODO acl
     if (folderName === 'web') {
       argvs.push(session)
+      // TODO should be cmoment, only for form submit
+      // AJAX calls use JavaScript and are CORS-restricted.
+      // There is no way for a simple <form> to send JSON,
+      // so by accepting only JSON, you eliminate the possibility of the above form
+      // https://github.com/pillarjs/understanding-csrf
       argvs.push(csrfMiddleware)
     } else {
       argvs.push(cors)

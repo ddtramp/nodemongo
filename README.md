@@ -2,7 +2,11 @@
 
 // Authentication           done
 
-// oauth   see [github](https://github.com/ddtramp/oauth-passport-demo)
+// oauth   see [github](https://github.com/ddtramp/oauth-passport-demo)   wait passport
+
+https://segmentfault.com/a/1190000011557953
+
+https://www.jianshu.com/p/7010bea0c656
 
 // sql 注入                 done
 

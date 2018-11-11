@@ -113,6 +113,8 @@ module.exports = {
     }
   },
   'POST /web/reset': async (ctx, next) => {
+    console.log('csrf: ', ctx.csrf)
+    console.dir(ctx.session)
     try {
       let body = ctx.request.body
       let email = body.email.trim()
