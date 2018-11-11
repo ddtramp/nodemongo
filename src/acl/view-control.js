@@ -4,7 +4,7 @@ const access = async (ctx, next) => {
   if (ctx.session.user) {
     isAllow = await ctx.acl.isAllowed(ctx.session.user._id, ctx.path, 'get')
   } else {
-    isAllow = await ctx.acl.isAllowed('guest', ctx.path, 'get')
+    isAllow = await ctx.acl.isAllowed('guest', '/' + ctx.path.split('/')[1], 'get')
   }
   if (isAllow) {
     ctx.session.refresh() // TODO refresh session

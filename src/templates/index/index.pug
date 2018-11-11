@@ -14,13 +14,18 @@ block content
 
   script.
     $(() => {
+      const csrf = '!{token}'
+
       $('.exit').on('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
         $.ajax({
-          url: 'https://localhost:8000/web/logout',
+          url: '/web/logout',
           type: 'GET',
           dataType: 'json',
+          beforeSend (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader('csrf-token', csrf)
+          },
           success (res) {
             if (res.status === 200) {
               window.location.reload()

@@ -4,7 +4,7 @@ const crypto = require('./../lib/crypto')
 const dbName = process.argv[2].toString();
 
 (async () => {
-  const url = 'mongodb://test:test@localhost:27017/' + dbName
+  const url = 'mongodb://test:test@mongodb_mongo_1_5a38c689f6ca:27017/' + dbName
   // Database Name
   const client = new MongoClient(url, {
     useNewUrlParser: true
@@ -62,13 +62,13 @@ const dbName = process.argv[2].toString();
     let adminUser = await db.collection('users').insertOne({
       email: 'wangxichao001@gmail.com',
       name: 'jack',
-      password: crypto.sha1('abs122825619').toString()
+      password: await crypto.hash('abs122825619')
     })
 
     let generalUser = await db.collection('users').insertOne({
       email: 'wangxichao001@hotmail.com',
       name: 'jack',
-      password: crypto.sha1('abs122825619').toString()
+      password: await crypto.hash('abs122825619')
     })
 
     await acl.addUserRoles(adminUser.insertedId.toString(), ['admin'])

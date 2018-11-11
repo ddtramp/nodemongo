@@ -4,6 +4,8 @@ html
     include ./../common/head.pug
     link(href='./../../static/css/sign.css' rel='stylesheet')
     script.
+      const csrf = '!{token}'
+
       $(() => {
         const submit = (e) => {
           let passwd = $('#inputPassword').val().trim()
@@ -17,10 +19,13 @@ html
             password: $('#inputPassword').val()
           }
           $.ajax({
-            url: 'https://localhost:8000/web/register',
+            url: '/web/register',
             type: 'POST',
             data: data,
             dataType: 'json',
+            beforeSend (XMLHttpRequest) {
+              XMLHttpRequest.setRequestHeader('csrf-token', csrf)
+            },
             success (res) {
               if (res.status === 200) {
                 window.location.href = '/'

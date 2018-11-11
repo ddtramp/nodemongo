@@ -92,12 +92,29 @@ DB.init((db, client) => {
   app.use(viewRouter.routes())
 
   const server = spdy.createServer(options, app.callback())
-  server.listen(443, () => {
-    // logger.info(`Server is running at ${process.env.PORT}`)
-    logger.info(`Server is running at ${443}`)
-  })
+
+  const boot = () => {
+    server.listen(443, () => {
+      // logger.info(`Server is running at ${process.env.PORT}`)
+      logger.info(`Server is running at ${443}`)
+    })
+  }
 
   process.on('uncaughtException', (error) => {
     logger.error('uncaughtException: ' + error)
   })
+
+  if (require.main === module) {
+    boot()
+  } else {
+    // for testing
+    console.log('Running app as a module')
+    module.exports = {
+      boot,
+      shutdown: () => {
+        server.close(process.exit)
+      },
+      port: 443
+    }
+  }
 })

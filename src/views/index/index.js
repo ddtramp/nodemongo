@@ -65,7 +65,6 @@ module.exports = {
     })
   },
   'GET /register.html': async (ctx, next) => {
-    ctx.session = null
     const http2Pusher = require('./../../lib/http2-pusher')
     http2Pusher({
       mainfestData: {
@@ -92,9 +91,15 @@ module.exports = {
    * verify email and token
    * reset password
    */
-  'POST /reset/:userId/:token': async (ctx, next) => {
-    ctx.body = 'lalala...'
-    ctx.type = 'text/html'
+  'GET /reset/:userId/:token': async (ctx, next) => {
+    // TODO reset password
+    // Store.get(token)
+    // should render template
+    ctx.body = {
+      csrf: ctx.csrf,
+      TODO: 'TODO should be validate token and userId'
+    }
+    ctx.type = 'application/json'
   },
   'GET /protected.html': async (ctx, next) => {
     ctx.type = 'text/html'

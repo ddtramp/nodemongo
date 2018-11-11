@@ -7,12 +7,13 @@
 const Winston = require('winston')
 require('winston-mongodb')
 require('winston-daily-rotate-file')
+const config = require('./../config')
 
 // TODO  config file, custom Logger
 const MongoDb = new Winston.transports.MongoDB({
   level: 'error',
   silent: false,
-  db: 'mongodb://test:test@mongodb_mongo_1:27017/db-logs',
+  db: `mongodb://${config.mongo.user}:${config.mongo.passwd}@${config.mongo.host}:${config.mongo.port}/db-logs`,
   options: {
     useNewUrlParser: true
   },

@@ -59,7 +59,7 @@ function middleware (opts = {}) {
     const links = Object.keys(manifest).map(key => {
       const type = manifest[key].type
       const u = new url.URL(`${protocol}://${host}${key}`)
-      return `<${u}>; rel=preload; as=${type}`
+      return `<${u}>; rel='preload'; as='${type}'`
     })
 
     let link = ctx.response.header.link || ''

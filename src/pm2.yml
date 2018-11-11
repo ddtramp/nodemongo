@@ -1,0 +1,9 @@
+apps:
+  - name: nodemongodhttp2
+    script: ./server.js
+    cwd: /usr/src/app/
+    interpreter: node
+    instances: 1
+    watch: true
+    watch_options:
+      usePolling: true

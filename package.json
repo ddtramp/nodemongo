@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "node ./src/initScript/seedDb.js db-dev",
-    "start": "if [[ ${NODE_ENV} = production ]]; then pm2-docker start -i 0 server.js; else pm2-dev server.js; fi"
+    "start": "if [[ ${NODE_ENV} = production ]]; then pm2-docker start -i 0 server.js; else pm2-dev pm2.yml --only nodemongodhttp2; fi"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +33,7 @@
     "parameter": "3.4.0",
     "path": "0.12.7",
     "pug": "2.0.3",
+    "socks": "^2.2.2",
     "spdy": "3.4.7",
     "uid-safe": "2.1.5",
     "uuid": "3.3.2",

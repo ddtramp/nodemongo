@@ -13,7 +13,7 @@ html
             //- _csrf: csrf
           }
           $.ajax({
-            url: 'https://localhost:8000/web/reset',
+            url: '/web/reset',
             type: 'POST',
             data: data,
             dataType: 'json',
@@ -22,7 +22,7 @@ html
             },
             success (res) {
               if (res.status === 200) {
-                window.location.href = '/'
+                console.log(res)
               } else {
                 alert(res.message)
                 console.log(res)

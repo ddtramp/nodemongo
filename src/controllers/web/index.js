@@ -22,7 +22,6 @@ module.exports = {
           }
         } else {
           let passwd = await crypt.hash(password)
-          console.log(passwd)
           let user = await ctx.db.collection('users').insertOne({
             email,
             password: passwd
@@ -59,7 +58,6 @@ module.exports = {
       let email = body.email.trim()
       let password = body.password.trim()
       let remember = body.remember
-
       let data = {
         email,
         password,
@@ -122,12 +120,12 @@ module.exports = {
       let rules = { email: 'email' }
       let errors = ctx.validator.validate(rules, data)
       if (!errors) {
-        let user = await ctx.db.collection('users').find({ email })
+        let user = await ctx.db.collection('users').findOne({ email })
         if (user) {
           let token = uuidv4()
           Store.set(user, { sid: token })
-          const url = `${ctx.originalUrl}reset/${user.email}/${token}`
-          let res = await sendEmail('lalala@gmail.com', email, 'Reset Password', 'Please open this link reset you password', `Please open this link in 5 minutes, <a href="${url}">${url}</a>`)
+          const url = `${ctx.origin}/reset/${user._id}/${token}`
+          let res = await sendEmail('122825619@qq.com', email, 'Reset Password', 'Please open this link reset you password', `Please open this link in 5 minutes, <a href="${url}">${url}</a>`)
           if (res) {
             ctx.body = {
               status: 401,
