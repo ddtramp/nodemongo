@@ -1,15 +1,16 @@
 # README
 
-// TODO Authentication
-// sql 注入
-// csrf done
-// koa-compress gzip
+// Authentication           done
+// oauth   see github
+// sql 注入s
+// csrf                     done
+// koa-compress gzip        done  http2/push
 // koa-helmet security
-// koa-valivate
+// koa-valivate             done  parameter
 // TODO redis cluster
 // TODO mogodb cluster
 // TODO logic server custer
-// add dev pm2.yml file https://segmentfault.com/q/1010000004131939
+// add dev pm2.yml file https://segmentfault.com/q/1010000004131939     done
 
 ```bash
  docker build -t ddtramdocker/nodemongohttp2:1.0.0 --build-arg mongodb_container_name=mongodb_mongo_1 --build-arg app_env=dev  .
