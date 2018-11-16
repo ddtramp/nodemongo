@@ -4,9 +4,9 @@
 
 // oauth   see [github](https://github.com/ddtramp/oauth-passport-demo)   wait passport
 
-https://segmentfault.com/a/1190000011557953
+[https://segmentfault.com/a/1190000011557953](https://segmentfault.com/a/1190000011557953)
 
-https://www.jianshu.com/p/7010bea0c656
+[https://www.jianshu.com/p/7010bea0c656](https://www.jianshu.com/p/7010bea0c656)
 
 // sql 注入                 done
 
@@ -18,9 +18,9 @@ https://www.jianshu.com/p/7010bea0c656
 
 this project use koa-crsf
 
-https://blog.risingstack.com/node-js-security-checklist/
+[https://blog.risingstack.com/node-js-security-checklist/](https://blog.risingstack.com/node-js-security-checklist/)
 
-https://segmentfault.com/a/1190000003860400
+[https://segmentfault.com/a/1190000003860400](https://segmentfault.com/a/1190000003860400)
 
 // koa-valivate             done  parameter
 
@@ -30,7 +30,9 @@ https://segmentfault.com/a/1190000003860400
 
 // TODO logic server custer
 
-// add dev pm2.yml file https://segmentfault.com/q/1010000004131939     done
+[dev pm2.yml file](https://segmentfault.com/q/1010000004131939 )     done
+
+[How to share one database connection in a node/express app](https://itnext.io/how-to-share-a-single-database-connection-in-a-node-js-express-js-app-fcad4cbcb1e)
 
 ```bash
  docker build -t ddtramdocker/nodemongohttp2:1.0.0 --build-arg mongodb_container_name=mongodb_mongo_1 --build-arg app_env=dev  .

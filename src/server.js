@@ -27,7 +27,8 @@ const options = {
 }
 // Mogodb driver is async
 // db must be register before use router
-DB.init((db, client) => {
+!(async () => {
+  const db = await DB.initDb()
   const app = new Koa2()
   const isProduction = process.env.NODE_ENV === 'production'
 
@@ -117,4 +118,5 @@ DB.init((db, client) => {
       port: 443
     }
   }
-})
+})()
+
