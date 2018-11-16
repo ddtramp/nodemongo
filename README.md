@@ -1,5 +1,9 @@
 # README
 
+integrated koa-session faild, wait solution
+
+[koa-passport](https://github.com/rkusa/koa-passport/issues)
+
 // Authentication           done
 
 // oauth   see [github](https://github.com/ddtramp/oauth-passport-demo)   wait passport

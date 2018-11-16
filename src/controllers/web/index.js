@@ -6,6 +6,7 @@ const sendEmail = require('./../../lib/send-email')
 const uuidv4 = require('uuid/v4')
 const RedisStroe = require('./../../lib/Store.js')
 let Store = new RedisStroe()
+const passport = require('./../../lib/passport-config')
 
 module.exports = {
   'POST /web/register': async (ctx, next) => {
@@ -52,10 +53,9 @@ module.exports = {
     }
   },
   'POST /web/login': async (ctx, next) => {
-    ctx.session = {}
     try {
       let body = ctx.request.body
-      let email = body.email.trim()
+      let email = body.username.trim()
       let password = body.password.trim()
       let remember = body.remember
       let data = {
@@ -73,31 +73,20 @@ module.exports = {
       }
       let errors = ctx.validator.validate(rule, data)
       if (!errors) {
-        let user = await ctx.db.collection('users').findOne({ email })
-        if (!user) {
-          ctx.response.body = {
-            status: 401,
-            data: null,
-            message: 'Email and/or password is wrong.'
+        return passport.authenticate('local', async function (err, user, info, status) {
+          // console.log(err, user, info, status)
+          if (err) {
+            ctx.throw(500)
           }
-        } else if (await crypt.compare(password, user.password)) {
-          ctx.session.user = user
-          ctx.session.remember = remember
-          ctx.cookies.set('remenber', remember)
-          ctx.response.body = {
-            status: 200,
-            data: Object.assign({}, user, {
-              password: null
-            }),
-            message: 'success'
+          if (user) {
+            await ctx.login(user)
+            ctx.body = {
+              status: 200,
+              body: user,
+              message: 'success'
+            }
           }
-        } else {
-          ctx.response.body = {
-            status: 401,
-            data: null,
-            message: 'Email and/or password is wrong.'
-          }
-        }
+        })(ctx, next)
       } else {
         ctx.response.body = {
           status: 403,
@@ -113,8 +102,6 @@ module.exports = {
     }
   },
   'POST /web/reset': async (ctx, next) => {
-    console.log('csrf: ', ctx.csrf)
-    console.dir(ctx.session)
     try {
       let body = ctx.request.body
       let email = body.email.trim()
@@ -166,7 +153,7 @@ module.exports = {
   },
   'GET /web/logout': async (ctx, next) => {
     try {
-      ctx.session = {}
+      ctx.logout()
       ctx.response.body = {
         status: 200,
         data: null,

@@ -8,7 +8,6 @@ const bodyparser = require('koa-bodyparser')
 const Router = require('koa-router')
 
 const rest = require('./lib/rest')
-const controller = require('./lib/controller')
 const template = require('./lib/templating')
 const Acl = require('./lib/ACL')
 const validator = require('./lib/parameter')
@@ -27,7 +26,11 @@ const options = {
 }
 // Mogodb driver is async
 // db must be register before use router
-DB.init((db, client) => {
+!(async () => { // eslint-disable-line
+  const db = await DB.initDb()
+  const passport = require('./lib/passport-config')
+  const controller = require('./lib/controller')
+
   const app = new Koa2()
   const isProduction = process.env.NODE_ENV === 'production'
 
@@ -79,6 +82,8 @@ DB.init((db, client) => {
 
   app.use(bodyparser())
 
+  app.use(passport.initialize())
+
   app.use(template(path.join(__dirname, '/templates'), {
     globals: [] // https://github.com/pugjs/pug/issues/2141
   }))
@@ -117,4 +122,4 @@ DB.init((db, client) => {
       port: 443
     }
   }
-})
+})()

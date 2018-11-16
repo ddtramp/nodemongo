@@ -9,6 +9,7 @@ const apiControl = require('./../acl/api-control')
 
 const csrfMiddleware = require('./csrf')
 const session = require('./session')
+const passport = require('./passport-config')
 
 const jwtModule = require('./jwt').middleware
 
@@ -57,6 +58,7 @@ function addControllers (router) {
     // TODO acl
     if (folderName === 'web') {
       argvs.push(session)
+      argvs.push(passport.session())
       // TODO should be cmoment, only for form submit
       // AJAX calls use JavaScript and are CORS-restricted.
       // There is no way for a simple <form> to send JSON,
@@ -96,6 +98,7 @@ function addViewMapping (router, mapping, glolbalPusher, childrenPusher) {
 const addViewControllers = (router) => {
   // view session
   router.use(session)
+  router.use(passport.session())
 
   router.use(csrfMiddleware)
 

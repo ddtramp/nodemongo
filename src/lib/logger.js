@@ -10,6 +10,7 @@ require('winston-daily-rotate-file')
 const config = require('./../config')
 
 // TODO  config file, custom Logger
+// use different db
 const MongoDb = new Winston.transports.MongoDB({
   level: 'error',
   silent: false,
