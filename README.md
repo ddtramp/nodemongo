@@ -1,24 +1,24 @@
 # README
 
-integrated koa-session faild, wait solution
+1. [koa-passport](https://github.com/rkusa/koa-passport/issues)
 
-[koa-passport](https://github.com/rkusa/koa-passport/issues)
+[issue fix](https://github.com/rkusa/koa-passport/issues/100#issuecomment-358718370)
 
-// Authentication           done
+2. Authentication done
 
-// oauth   see [github](https://github.com/ddtramp/oauth-passport-demo)   wait passport
+oauth see [github](https://github.com/ddtramp/oauth-passport-demo) wait passport
 
 https://segmentfault.com/a/1190000011557953
 
 https://www.jianshu.com/p/7010bea0c656
 
-// sql 注入                 done
+3.  sql inject done
 
-// csrf                     done
+4.  csrf done
 
-// koa-compress gzip        done  http2/push
+5.  koa-compress gzip done http2/push
 
-// koa-helmet security
+6.  koa-helmet security
 
 this project use koa-crsf
 
@@ -26,15 +26,17 @@ https://blog.risingstack.com/node-js-security-checklist/
 
 https://segmentfault.com/a/1190000003860400
 
-// koa-valivate             done  parameter
+7.  koa-valivate done parameter
 
-// TODO redis cluster
+8.  TODO redis cluster
 
-// TODO mogodb cluster
+9.  TODO mogodb cluster
 
-// TODO logic server custer
+10. TODO logic server custer
 
-// add dev pm2.yml file https://segmentfault.com/q/1010000004131939     done
+11. add dev pm2.yml file https://segmentfault.com/q/1010000004131939 done
+
+12. docker dev code
 
 ```bash
  docker build -t ddtramdocker/nodemongohttp2:1.0.0 --build-arg mongodb_container_name=mongodb_mongo_1 --build-arg app_env=dev  .
@@ -42,11 +44,11 @@ https://segmentfault.com/a/1190000003860400
 server version:
  docker run --name nodemongohttp2 -p 8000:443 -v /usr/local/Dev/nodejs/nodeMongodDocker/localhost-cert.pem:/usr/src/app/localhost-cert.pem  -v /usr/local/Dev/nodejs/nodeMongodDocker/localhost-privkey.pem:/usr/src/app/localhost-privkey.pem  -v /usr/local/Dev/nodejs/nodeMongodDocker/src:/usr/src/app -v  /usr/local/Dev/nodejs/nodeMongodDocker/package.json:/usr/src/app/package.json -v /usr/local/Dev/nodejs/nodeMongodDocker/node_modules:/usr/src/app/node_modules  --network=mongodb_default -d edfef709a0a6
 
-mount nfs
+mount nfs(remote mount files)
 
   mount -t nfs -o rw,vers=3,tcp,fsc,actimeo=1 192.168.2.132:/Users/jackwang/Documents/Dev /usr/local/Dev/
 
-  -o list , 号分割
+  -o list , split
 
 sslocal
 
@@ -96,7 +98,7 @@ openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost'  -keyout
 
 ```
 
-## Tec
+## Tech
 
 - [http2](https://www.npmjs.com/package/spdy) Nodejs build-in module http2 does not work correctly
 
@@ -116,7 +118,7 @@ openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost'  -keyout
 
 - fs `build-in` file
 
-- [crypto-js](https://www.npmjs.com/package/crypto-js)   encrypt string use bcrypt -- deprecated
+- [crypto-js](https://www.npmjs.com/package/crypto-js) encrypt string use bcrypt -- deprecated
 
 - [bcrypt](https://www.npmjs.com/package/bcrypt) install error, change to bcryptjs
 
@@ -138,7 +140,7 @@ openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost'  -keyout
 
 - [acl](https://github.com/OptimalBits/node_acl) NODE ACL - Access Control Lists for Node
 
-- [koa-crsf](https://www.npmjs.com/package/koa-csrf)  Cross site request forgery
+- [koa-crsf](https://www.npmjs.com/package/koa-csrf) Cross site request forgery
 
 - [parameter](https://www.npmjs.com/package/parameter) validate user input
 
@@ -147,5 +149,7 @@ openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost'  -keyout
 - [nodemailer](https://www.npmjs.com/package/nodemailer) send email see lib/send-email.js
 
 - [socks](https://www.npmjs.com/package/socks) for nodemailer proxy, socks support
-----
+
+---
+
 by jack

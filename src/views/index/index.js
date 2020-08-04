@@ -1,33 +1,31 @@
 module.exports = {
-  'GET /': async (ctx, next) => {
-    let session = ctx.session
-    let user = {}
-    if (session.remember) {
-      user = session.user
+  "GET /": async (ctx, next) => {
+    let user = {};
+    if (ctx.isAuthenticated()) {
+      user = ctx.state.user;
+    } else {
+      // ctx.response.redirect("/login.html");
     }
-    // if (ctx.session.user) {
-    ctx.render('index/index.pug', {
+    ctx.render("index/index.pug", {
       user,
       token: ctx.csrf,
-      title: 'index page'
-    })
-    // } else {
-    //   ctx.response.redirect('/login.html')
-    // }
+      title: "index page",
+    });
   },
-  'GET /index.html': async (ctx, next) => {
-    ctx.redirect('/')
+  "GET /index.html": async (ctx, next) => {
+    ctx.redirect("/");
   },
-  'GET /login.html': async (ctx, next) => {
-    const http2Pusher = require('./../../lib/http2-pusher')
-    http2Pusher({
-      mainfestData: {
-        '/static/images/logo.png': {
-          weight: 1,
-          type: 'img'
-        }
-      }
-    })(ctx, next)
+  "GET /login.html": async (ctx, next) => {
+    // const http2Pusher = require("./../../lib/http2-pusher");
+    // http2Pusher({
+    //   mainfestData: {
+    //     "/static/images/logo.png": {
+    //       weight: 1,
+    //       type: "img",
+    //     },
+    //   },
+    // })(ctx, next);
+    await next();
     // https://nodejs.org/dist/latest-v8.x/docs/api/zlib.html
     // example http2 pusher
     // let context = ctx.res.push('/static/css/sign.css', {
@@ -58,67 +56,68 @@ module.exports = {
     //     .pipe(stream)
     // })
 
-    ctx.render('login/login.pug', {
-      hi: 'hi pug',
-      title: 'login',
-      token: ctx.csrf
-    })
-  },
-  'GET /register.html': async (ctx, next) => {
-    const http2Pusher = require('./../../lib/http2-pusher')
-    http2Pusher({
-      mainfestData: {
-        '/static/images/logo.png': {
-          weight: 1,
-          type: 'img'
-        }
-      }
-    })(ctx, next)
-    ctx.render('login/register.pug', {
-      hi: 'hi pug',
+    ctx.render("login/login.pug", {
+      hi: "hi pug",
+      title: "login",
       token: ctx.csrf,
-      title: 'Register Page'
-    })
+    });
   },
-  'GET /reset.html': async (ctx, next) => {
-    ctx.render('login/reset.pug', {
-      hi: 'hi pug',
+  "GET /register.html": async (ctx, next) => {
+    // const http2Pusher = require("./../../lib/http2-pusher");
+    // http2Pusher({
+    //   mainfestData: {
+    //     "/static/images/logo.png": {
+    //       weight: 1,
+    //       type: "img",
+    //     },
+    //   },
+    // })(ctx, next);
+    await next();
+    ctx.render("login/register.pug", {
+      hi: "hi pug",
       token: ctx.csrf,
-      title: 'Reset Page'
-    })
+      title: "Register Page",
+    });
+  },
+  "GET /reset.html": async (ctx, next) => {
+    ctx.render("login/reset.pug", {
+      hi: "hi pug",
+      token: ctx.csrf,
+      title: "Reset Page",
+    });
   },
   /**
    * verify email and token
    * reset password
    */
-  'GET /reset/:userId/:token': async (ctx, next) => {
+  "GET /reset/:userId/:token": async (ctx, next) => {
     // TODO reset password
     // Store.get(token)
     // should render template
     ctx.body = {
       csrf: ctx.csrf,
-      TODO: 'TODO should be validate token and userId'
-    }
-    ctx.type = 'application/json'
+      TODO: "TODO should be validate token and userId",
+    };
+    ctx.type = "application/json";
   },
-  'GET /protected.html': async (ctx, next) => {
-    ctx.type = 'text/html'
-    ctx.status = 200
-    ctx.body = 'protected page'
+  "GET /protected.html": async (ctx, next) => {
+    ctx.type = "text/html";
+    ctx.status = 200;
+    ctx.body = "protected page";
   },
-  'GET /profile': async (ctx, next) => {
-    ctx.type = 'text/html'
-    ctx.status = 200
-    ctx.body = 'profile page'
+  "GET /profile": async (ctx, next) => {
+    ctx.type = "text/html";
+    ctx.status = 200;
+    ctx.body = "profile page";
   },
-  'GET /admin': async (ctx, next) => {
-    ctx.type = 'text/html'
-    ctx.status = 200
-    ctx.body = 'admin page'
+  "GET /admin": async (ctx, next) => {
+    ctx.type = "text/html";
+    ctx.status = 200;
+    ctx.body = "admin page";
   },
-  'GET /404.html': async (ctx, next) => {
-    ctx.type = 'text/html'
-    ctx.status = 200
-    ctx.body = '404, not found'
-  }
-}
+  "GET /404.html": async (ctx, next) => {
+    ctx.type = "text/html";
+    ctx.status = 200;
+    ctx.body = "404, not found";
+  },
+};
